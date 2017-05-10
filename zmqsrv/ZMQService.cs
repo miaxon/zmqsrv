@@ -19,10 +19,26 @@ namespace zmqsrv
 
         protected override void OnStart(string[] args)
         {
+            AddLog("start " + DateTime.Now.ToLongDateString());
         }
 
         protected override void OnStop()
         {
+            AddLog("stop " + DateTime.Now.ToLongDateString());
+        }
+
+        public void AddLog(string log)
+        {
+            try
+            {
+                if (!EventLog.SourceExists("ZMQService"))
+                {
+                    EventLog.CreateEventSource("ZMQService", "ZMQService");
+                }
+                eventLog.Source = "ZMQService";
+                eventLog.WriteEntry(log);
+            }
+            catch { }
         }
     }
 }
